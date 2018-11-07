@@ -1,0 +1,41 @@
+.puzzelorg-popup {
+    position: fixed;
+    width: 50%;
+    min-width: 300px;
+    max-width: 800px;
+    background-color: #fbf814;
+    color: black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80%;
+    min-height: 500px;
+    max-height: 1000px;
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.puzzelorg-popup .close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: black;
+    font-weight: bold;
+    display: block;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.puzzelorg-popup .puzzle {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.puzzelorg-popup .puzzle:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+} 
+
+
+
