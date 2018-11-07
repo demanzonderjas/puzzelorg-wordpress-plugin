@@ -56,7 +56,7 @@ class PuzzelAuth {
      * Create a button to retrieve the puzzles after being authenticated
      */
     createRetrievePuzzleButton() {
-        this.authWrapper.innerHTML = "";
+        this.authWrapper.innerHTML = "<p>You are authenticated with Puzzel.org!</p>";
         
         const retrieveButton = document.createElement("button");
         retrieveButton.innerHTML = "Retrieve all puzzles";
@@ -148,6 +148,7 @@ class PuzzelAuth {
         e.preventDefault()
         const email = this.emailField.value
         const password = this.passwordField.value
+        this.loader.classList.remove("hide");
 
         firebase.auth().signInWithEmailAndPassword(email, password)
         .catch(function(error) {

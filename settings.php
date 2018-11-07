@@ -64,7 +64,7 @@ function puzzelorg_options_page()
 {
     // add top level menu page
     add_menu_page(
-        'puzzelorg',
+        'Puzzel.org authentication and data',
         'Puzzel.org Options',
         'manage_options',
         'puzzelorg',
