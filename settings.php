@@ -13,27 +13,6 @@ function puzzelorg_settings_init()
     register_setting('puzzelorg', 'puzzelorg_options');
 
     // register a new section in the "puzzelorg" page
-    add_settings_section(
-        'puzzelorg_section_developers',
-        __('Puzzel.org section', 'puzzelorg'),
-        'puzzelorg_section_developers_cb',
-        'puzzelorg'
-    );
-
-    // register a new field in the "puzzelorg_section_developers" section, inside the "puzzelorg" page
-    // add_settings_field(
-    //     'puzzelorg_field_apikey', // as of WP 4.6 this value is used only internally
-    //     // use $args' label_for to populate the id inside the callback
-    //     __('Authentication', 'puzzelorg'),
-    //     'puzzelorg_field_apikey_cb',
-    //     'puzzelorg',
-    //     'puzzelorg_section_developers',
-    //     [
-    //         'label_for' => 'puzzelorg_field_apikey',
-    //         'class' => 'puzzelorg_row',
-    //         'puzzelorg_custom_data' => 'custom',
-    //     ]
-    // );
 
     add_settings_field(
         'puzzelorg_field_puzzles', // as of WP 4.6 this value is used only internally
@@ -44,7 +23,7 @@ function puzzelorg_settings_init()
         'puzzelorg_section_developers',
         [
             'label_for' => 'puzzelorg_field_puzzles',
-            'class' => 'puzzelorg_row',
+            'class' => '',
             'puzzelorg_custom_data' => 'custom',
         ]
     );
@@ -72,31 +51,9 @@ function puzzelorg_section_developers_cb($args)
  <?php
 }
 
-// pill field cb
-
-// field callbacks can accept an $args parameter, which is an array.
-// $args is defined at the add_settings_field() function.
-// wordpress has magic interaction with the following keys: label_for, class.
-// the "label_for" key value is used for the "for" attribute of the <label>.
-// the "class" key value is used for the "class" attribute of the <tr> containing the field.
-// you can add custom key value pairs to be used inside your callbacks.
-// function puzzelorg_field_apikey_cb($args)
-// {
-//     // get the value of the setting we've registered with register_setting()
-//     $options = get_option('puzzelorg_options');
-//     // output the field
-//     if(isset($options[$args['label_for']]) && !empty($options[$args['label_for']])) {
-//     ?>
-    
-<?php
-//     }
-// }
-
 function puzzelorg_field_puzzles_cb($args) {
     ?>
     
-    <div id="puzzle-container"></div>
-
     <?php
 }
 
@@ -145,12 +102,26 @@ function puzzelorg_options_page_html()
     ?>
  <div class="wrap">
  <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-<input id="puzzelorg-email" type="email" value="" placeholder="<?= __('Puzzel.org email', 'puzzelorg') ?>" />
-<input id="puzzelorg-password" type="password" placeholder="<?= __('Puzzel.org password', 'puzzelorg') ?>" />
-<button id="puzzelorg-authenticate">
-<?= __('Get API Key', 'puzzelorg') ?>
-</button>
+ <div id="auth-wrapper"></div>  
+ <div id="puzzelorg-loader" class="hide">
+     <img src="/wp-content/plugins/puzzel-org/images/loader.svg" />
+ </div>
+<p><?= __('Save the puzzles after they are loaded to use them in your posts/pages', 'puzzelorg') ?></p>
  <form id="puzzle-form" action="options.php" method="post">
+ <div id="puzzle-container">
+     <?php
+        $puzzles = get_option('puzzelorg_options');
+        if(!empty($puzzles)) {
+            foreach($puzzles as $key => $puzzle) {
+                echo '<div class="puzzle">';
+                echo '<input type="text" value="' . $puzzle['name'] . '"name="puzzelorg_options[' . $key . '][name]" readonly />';
+                echo '<input type="hidden" value="' . $puzzle['key'] . '"name="puzzelorg_options[' . $key . '][key]" />';
+                echo '<input type="hidden" value="' . $puzzle['type'] . '"name="puzzelorg_options[' . $key . '][type]" />';
+                echo '</div>';
+            }
+        }
+     ?>
+</div>
  <?php
     // output security fields for the registered setting "puzzelorg"
     settings_fields('puzzelorg');
@@ -158,7 +129,7 @@ function puzzelorg_options_page_html()
     // (sections are registered for "puzzelorg", each field is registered to a specific section)
     do_settings_sections('puzzelorg');
     // output save settings button
-    submit_button('Save Settings');
+    submit_button('Save Puzzles');
     ?>
  </form>
  <script src="/wp-content/plugins/puzzel-org/dist/main.js"></script>

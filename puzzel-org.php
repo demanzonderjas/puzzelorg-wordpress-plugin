@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: Crossword Puzzle - Puzzel.org
+Plugin Name:  Embeddable Puzzles - Puzzel.org
 Plugin URI:   https://puzzel.org/en/features/create-crossword/wordpress
-Description:  Embed puzzles of Puzzel.org
+Description:  Embed puzzles of Puzzel.org - Crossword puzzles, word search puzzles, memory and more!
 Version:      20180711
-Author:       Puzzel.org
+Author:       Daan Weustenraad - Puzzel.org
 Author URI:   https://puzzel.org
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,16 +14,20 @@ Text Domain:  puzzel.org
 require_once 'constants.php';
 require_once 'settings.php';
 
-function setup_options() {
-    add_option(PUZZLE_UID_OPTION, 'fone');
-    add_option(PUZZLE_PUZZLES, 'test');
-}
-
+/**
+ * Setup hook to remove the options / puzzles from the database on deactivation/uninstall
+ *
+ * @return void
+ */
 function remove_options() {
-    delete_option(PUZZLE_UID_OPTION);
-    delete_option(PUZZLE_PUZZLES);
+    delete_option('puzzelorg_options');
 }
 
+/**
+ * Create shortcode parsing for the Wordpress frontend
+ *
+ * @return string
+ */
 function puzzelorg_shortcodes_init()
 {
     function puzzelorg_shortcode($atts = [], $content = null)
@@ -80,7 +84,7 @@ function my_admin_head() {
     <!-- TinyMCE Shortcode Plugin -->
     <script type='text/javascript'>
     var my_plugin = {
-    'puzzles': '<?= wp_slash(json_encode($puzzles, true)) ?>',
+    'puzzles': '<?= wp_slash(json_encode($puzzles, true)) ?>'
     };
     </script>
     <!-- TinyMCE Shortcode Plugin -->
@@ -94,8 +98,6 @@ function add_stylesheet() {
 
 
 add_filter( 'mce_external_plugins', 'puzzelorg_plugin' );
-
-register_activation_hook( __FILE__, 'setup_options' );
 
 register_deactivation_hook( __FILE__, 'remove_options' );
 

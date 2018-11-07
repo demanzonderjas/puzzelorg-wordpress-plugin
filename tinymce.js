@@ -12,9 +12,13 @@
     
 	function html( cls, data ) {
         console.log(cls, data)
-        var key = data.match(/key="(.*)"/)[1];
+        var key = data.match(/key="([^"]+)"/)[1];
+        var width = data.match(/width="([^"]+)"/)[1];
+        var height = data.match(/height="([^"]+)"/)[1];
+        var type = data.match(/type="([^"]+)"/)[1];
+        console.log(key)
 		data = window.encodeURIComponent( data );
-		return "<div><iframe src='https://puzzel.org/nl/crossword/embed?p=" + key + "' width='750' height='800' frameborder='0'></iframe></div>";
+		return "<div><iframe src='https://puzzel.org/nl/" + type + "/embed?p=" + key + "' width='" + width + "' height='" + height + "' frameborder='0'></iframe></div>";
 	}
 
 
@@ -27,14 +31,47 @@
              console.log('initializing buttons')
               ed.addButton( 'puzzelorg_button', {
                    title : 'Insert shortcode',
-                   image : '../wp-includes/images/smilies/icon_eek.gif',
+                   image : '/wp-content/plugins/puzzel-org/images/icon.png',
                    onclick : function() {
                         var popup = document.createElement("div");
                         popup.classList.add("puzzelorg-popup");
+
+                        var header = document.createElement("h2");
+                        header.innerHTML = "Select your puzzle here";
+                        popup.appendChild(header);
+
+                        var settingDiv = document.createElement("div");
+
+                        var widthLabel = document.createElement("label");
+                        widthLabel.innerHTML = "Width";
+
+                        var widthInput = document.createElement("input");
+                        widthInput.setAttribute("type", "number");
+                        widthInput.setAttribute("value", 750);
+
+                        settingDiv.appendChild(widthLabel);
+                        settingDiv.appendChild(widthInput);
+
+                        var settingDiv2 = document.createElement("div");
+
+                        var heightLabel = document.createElement("label");
+                        heightLabel.innerHTML = "Height";
+
+                        var heightInput = document.createElement("input");
+                        heightInput.setAttribute("type", "number");
+                        heightInput.setAttribute("value", 800);
+
+                        settingDiv2.appendChild(heightLabel);
+                        settingDiv2.appendChild(heightInput);
+
+                        popup.appendChild(settingDiv);
+                        popup.appendChild(settingDiv2);
+
                         puzzlesArr.forEach(function(puzzleObj) {
                             var puzzle = document.createElement("div");
                             puzzle.classList.add("puzzle");
                             puzzle.setAttribute("data-id", puzzleObj.key)
+                            puzzle.setAttribute("data-type", puzzleObj.type);
                             puzzle.innerHTML = puzzleObj.name;
 
                             puzzle.addEventListener("click", addHTML);
@@ -50,7 +87,10 @@
 
                         function addHTML(e) {
                             var key = this.getAttribute("data-id");
-                            ed.selection.setContent('[puzzelorg key="' + key + '"]');
+                            var type = this.getAttribute("data-type");
+                            var width = widthInput.value;
+                            var height = heightInput.value;
+                            ed.selection.setContent('[puzzelorg key="' + key + '" width="' + width +'" height="' + height +'" type="' + type + '"]');
                             removePopup();
                         }
 

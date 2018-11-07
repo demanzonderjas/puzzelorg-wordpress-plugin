@@ -14,28 +14,84 @@
     z-index: 1000;
     overflow-y: auto;
     overflow-x: auto;
+    padding: 30px;
+    border-radius: 20px;
 }
 
 .puzzelorg-popup .close {
     position: absolute;
     top: 0px;
     right: 0px;
-    color: black;
     font-weight: bold;
+    background-color: rgb(251, 19, 19);
+    color: white;
     display: block;
-    padding: 20px;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
+    border-radius: 0 0 0 5px;
+}
+
+.puzzelorg-popup label {
+    width: 50px;
+    display: inline-block;
 }
 
 .puzzelorg-popup .puzzle {
     cursor: pointer;
-    padding: 5px;
+    padding: 10px 0;
+    font-size: 20px;
+    font-family: monospace;
     border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .puzzelorg-popup .puzzle:hover {
     background-color: rgba(255, 255, 255, 0.5);
 } 
+
+#puzzle-container {
+    position: relative;
+    margin-top: 20px;
+}
+
+#puzzle-container .puzzle {
+    margin-top: 10px;
+}
+
+#puzzle-container .puzzle input[type=text] {
+    padding: 20px;
+    font-size: 20px;
+    font-family: monospace;
+    width: 500px;
+    border: 0;
+    outline: 0;
+    background-color: white;
+    border-bottom: 5px solid black;
+}
+
+#puzzelorg-loader {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#puzzelorg-loader img {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    position: absolute;
+}
+
+#puzzelorg-loader.hide {
+    display: none;
+}
 
 
 
